@@ -1,4 +1,5 @@
-﻿using Common;
+﻿//using Common;
+using DemoEFCore2.Entites;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
@@ -14,11 +15,11 @@ namespace DemoEFCore2.Configurations
     {
         public void Configure(EntityTypeBuilder<Department> D)
         {
-            D.ToTable("Departments", "Sales");
+            D.ToTable("Departments", "dbo");
 
-            D.HasKey(D => D.DeptId);
+            D.HasKey(D => D.DepartmentId);
 
-            D.Property(D => D.DeptId)
+            D.Property(D => D.DepartmentId)
              .UseIdentityColumn(10, 10);
 
             //D.Property(D => D.DeptId)
@@ -38,13 +39,13 @@ namespace DemoEFCore2.Configurations
              .HasDefaultValue("HR")
              .HasAnnotation("MaxLenght", 20);
 
-            D.Property(D => D.DateOfCreation)
+            D.Property(D => D.CreationDate)
              .HasAnnotation("DataType", "DateTime")
              // .HasDefaultValue(DateTime.Now) // Default value = new DateTime (2025,3,4)
              .HasDefaultValueSql("GetDate()"); // After insert [stay the same] -- can be manually set
                                                // .HasComputedColumnSql("GetDate()"); // Automatically recalculation -- can not be manually set
 
-            D.Ignore(D => D.Description);
+            D.OwnsOne(D => D.Address, Address => Address.WithOwner());
 
         }
     }

@@ -15,10 +15,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="Common">
-      <HintPath>..\Common\bin\Debug\net9.0\Common.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>

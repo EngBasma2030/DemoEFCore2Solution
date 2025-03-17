@@ -6,14 +6,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DemoEFCore2.Migrations
 {
     /// <inheritdoc />
-    public partial class FluentApis : Migration
+    public partial class changeInEmpEmail : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.EnsureSchema(
-                name: "Sales");
-
             migrationBuilder.RenameColumn(
                 name: "Email",
                 schema: "dbo",
@@ -24,7 +21,8 @@ namespace DemoEFCore2.Migrations
                 name: "EmpEmail",
                 schema: "dbo",
                 table: "Employees",
-                type: "varchar",
+                type: "varchar(50)",
+                maxLength: 50,
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "nvarchar(max)");
@@ -39,17 +37,16 @@ namespace DemoEFCore2.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Departments",
-                schema: "Sales",
                 columns: table => new
                 {
-                    DeptId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "10, 10"),
-                    DepartmentNAme = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: true, defaultValue: "HR"),
-                    DateOfCreation = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GetDate()")
+                    DepartmentId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreationDate = table.Column<DateOnly>(type: "date", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Departments", x => x.DeptId);
+                    table.PrimaryKey("PK_Departments", x => x.DepartmentId);
                 });
         }
 
@@ -57,8 +54,7 @@ namespace DemoEFCore2.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Departments",
-                schema: "Sales");
+                name: "Departments");
 
             migrationBuilder.DropColumn(
                 name: "Address",
@@ -78,7 +74,8 @@ namespace DemoEFCore2.Migrations
                 type: "nvarchar(max)",
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "varchar");
+                oldType: "varchar(50)",
+                oldMaxLength: 50);
         }
     }
 }

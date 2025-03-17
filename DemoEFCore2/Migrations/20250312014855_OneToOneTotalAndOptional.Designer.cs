@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DemoEFCore2.Migrations
 {
     [DbContext(typeof(CompanyDbContext))]
-    [Migration("20250308132436_FluentApis")]
-    partial class FluentApis
+    [Migration("20250312014855_OneToOneTotalAndOptional")]
+    partial class OneToOneTotalAndOptional
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,19 +25,22 @@ namespace DemoEFCore2.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Common.Department", b =>
+            modelBuilder.Entity("DemoEFCore2.Entites.Department", b =>
                 {
-                    b.Property<int>("DeptId")
+                    b.Property<int>("DepartmentId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DeptId"), 10L, 10);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DepartmentId"), 10L, 10);
 
-                    b.Property<DateTime>("DateOfCreation")
+                    b.Property<DateOnly>("CreationDate")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
+                        .HasColumnType("date")
                         .HasDefaultValueSql("GetDate()")
                         .HasAnnotation("DataType", "DateTime");
+
+                    b.Property<int>("DepatmentManagerId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .ValueGeneratedOnAdd()
@@ -47,9 +50,12 @@ namespace DemoEFCore2.Migrations
                         .HasColumnName("DepartmentNAme")
                         .HasAnnotation("MaxLenght", 20);
 
-                    b.HasKey("DeptId");
+                    b.HasKey("DepartmentId");
 
-                    b.ToTable("Departments", "Sales");
+                    b.HasIndex("DepatmentManagerId")
+                        .IsUnique();
+
+                    b.ToTable("Departments", "dbo");
                 });
 
             modelBuilder.Entity("DemoEFCore2.Entites.Employee", b =>
@@ -71,6 +77,7 @@ namespace DemoEFCore2.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
+                        .HasMaxLength(50)
                         .HasColumnType("varchar")
                         .HasColumnName("EmpEmail");
 
@@ -85,6 +92,22 @@ namespace DemoEFCore2.Migrations
                     b.HasKey("EmpId");
 
                     b.ToTable("Employees", "dbo");
+                });
+
+            modelBuilder.Entity("DemoEFCore2.Entites.Department", b =>
+                {
+                    b.HasOne("DemoEFCore2.Entites.Employee", "Manager")
+                        .WithOne("ManagedDeprtment")
+                        .HasForeignKey("DemoEFCore2.Entites.Department", "DepatmentManagerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Manager");
+                });
+
+            modelBuilder.Entity("DemoEFCore2.Entites.Employee", b =>
+                {
+                    b.Navigation("ManagedDeprtment");
                 });
 #pragma warning restore 612, 618
         }

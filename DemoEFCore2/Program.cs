@@ -2,6 +2,7 @@
 using DemoEFCore2.Entites;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design.Internal;
+using System.ComponentModel.DataAnnotations;
 
 namespace DemoEFCore2
 {
@@ -13,7 +14,7 @@ namespace DemoEFCore2
 
             // CRUD operations
 
-            // deallocate || free || delte db connection
+            // deallocate || free || delete db connection
 
             //try
             //{
@@ -26,21 +27,21 @@ namespace DemoEFCore2
             //}
 
 
-            dbContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
-            Employee emp01 = new Employee()
-            {
-                Name = "Hamada", 
-                Age = 25,
-                Salary = 5000,
-                Email = "hamada@gmail.com"
-            };
-            Employee emp02 = new Employee()
-            {
-                Name = "Omar",
-                Age = 26,
-                Salary = 5000,
-                Email = "omar@gmail.com"
-            };
+            //dbContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
+            //Employee emp01 = new Employee()
+            //{
+            //    Name = "Hamada",
+            //    Age = 25,
+            //    Salary = 5000,
+            //    Email = "hamada@gmail.com"
+            //};
+            //Employee emp02 = new Employee()
+            //{
+            //    Name = "Omar",
+            //    Age = 26,
+            //    Salary = 5000,
+            //    Email = "omar@gmail.com"
+            //};
 
             #region Insert
             //Console.WriteLine(dbContext.Entry(emp01).State); // Detached
@@ -61,43 +62,96 @@ namespace DemoEFCore2
             //Console.WriteLine(dbContext.Entry(emp01).State); // Detached
             #endregion
 
-            var employee = dbContext.Employees.SingleOrDefault(E => E.EmpId == 3);
-            var employee02 = dbContext.Employees.AsNoTracking().SingleOrDefault(E => E.EmpId == 4);
+            //var employee = dbContext.Employees.SingleOrDefault(E => E.EmpId == 12);
+            //var employee02 = dbContext.Employees.AsNoTracking().SingleOrDefault(E => E.EmpId == 4);
 
             #region Update
-            //if (employee != null)
-            //{
-            //    employee.Name = "Noha"; // Modified
-            //}
+            ////if (employee != null)
+            ////{
+            ////    employee.Name = "Noha"; // Modified
+            ////}
 
-            //if (employee02 != null)
-            //{
-            //    employee02.Name = "Mona"; // Modified
-            //}
-            //dbContext.SaveChanges();
+            ////if (employee02 != null)
+            ////{
+            ////    employee02.Name = "Mona"; // Modified
+            ////}
+            ////dbContext.SaveChanges();
 
-            ////Console.WriteLine(employee?.Name ?? "NA");
+            //////Console.WriteLine(employee?.Name ?? "NA");
 
-            //Console.WriteLine(dbContext.Entry(employee).State); 
-            //Console.WriteLine(dbContext.Entry(employee02).State); 
+            ////Console.WriteLine(dbContext.Entry(employee).State); 
+            ////Console.WriteLine(dbContext.Entry(employee02).State); 
             #endregion
 
-            if (employee != null)
-            {
-                Console.WriteLine(dbContext.Entry(employee).State); // Unchanged
+            #region Remove
+            //if (employee != null)
+            //{
+            //    Console.WriteLine(dbContext.Entry(employee).State); // Unchanged
 
-                dbContext.Employees.Remove(employee);
-                dbContext.Set<Employee>().Remove(employee);
-                dbContext.Remove(employee);
-                dbContext.Entry(employee).State = EntityState.Deleted;
+            //    dbContext.Employees.Remove(employee);
+            //    dbContext.Set<Employee>().Remove(employee);
+            //    dbContext.Remove(employee);
+            //    dbContext.Entry(employee).State = EntityState.Deleted;
 
-                Console.WriteLine("After delete");
-                Console.WriteLine(dbContext.Entry(employee).State); // Deleted
+            //    Console.WriteLine("After delete");
+            //    Console.WriteLine(dbContext.Entry(employee).State); // Deleted
 
-                Console.WriteLine("After savechanges");
-                dbContext.SaveChanges();
-                Console.WriteLine(dbContext.Entry(employee).State); // Deleted
-            }
+            //    Console.WriteLine("After savechanges");
+            //    dbContext.SaveChanges();
+            //    Console.WriteLine(dbContext.Entry(employee).State); // Deleted
+            //}
+            #endregion
+
+            #region Session 04
+
+            #region Explicit loading
+            //var employee = (from E in dbContext.Employees
+            //                where E.EmpId == 20
+            //                select E).FirstOrDefault();
+
+            //// Extra Trip
+            //dbContext.Entry(employee).Reference(E => E.Department).Load();
+
+            //Console.WriteLine($"EmpName : {employee?.Name} , DeptName : {employee?.Department.Name}");
+
+            //var department = (from D in dbContext.Departments
+            //                  where D.DepartmentId == 11
+            //                  select D).FirstOrDefault();
+
+            //// Extra Trip
+            //dbContext.Entry(department).Collection(D => D.Employees).Load();
+            //Console.WriteLine($"DeptName : {department?.Name}");
+
+            //foreach (var emp in department?.Employees)
+            //{
+            //    Console.WriteLine($"EmpName : {emp.Name}");
+            //}
+            #endregion
+
+            #region 2. Eager loadind
+            var employee = (from E in dbContext.Employees.Include(E => E.Department)
+                             .Include(E => E.ManagedDeprtment)
+                            where E.EmpId == 20
+                            select E).FirstOrDefault();
+
+           
+            Console.WriteLine($"EmpName : {employee?.Name} , DeptName : {employee?.Department.Name}");
+
+            //var department = (from D in dbContext.Departments
+            //                  where D.DepartmentId == 11
+            //                  select D).FirstOrDefault();
+
+            //// Extra Trip
+            //dbContext.Entry(department).Collection(D => D.Employees).Load();
+            //Console.WriteLine($"DeptName : {department?.Name}");
+
+            //foreach (var emp in department?.Employees)
+            //{
+            //    Console.WriteLine($"EmpName : {emp.Name}");
+            //}
+            #endregion
+
+            #endregion
         }
     }
 }

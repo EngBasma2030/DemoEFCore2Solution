@@ -62,7 +62,17 @@ namespace DemoEFCore2.Entites
         [PasswordPropertyText]
         [NotMapped]
         public string Password { get; set; }
-        public string Address { get; set; }
+        public Address Address { get; set; }
 
+        // navigation property [one]
+        // EF core : Employee may manage department or not [partial participation]
+        [InverseProperty("Manager")]
+        public Department? ManagedDeprtment { get; set; }
+
+        public int? DepartmentId { get; set; }
+        // navigation property [one]
+        [InverseProperty("Employees")]
+        //[ForeignKey("Hamadaaa")]
+        public Department Department { get; set; }
     }
 }

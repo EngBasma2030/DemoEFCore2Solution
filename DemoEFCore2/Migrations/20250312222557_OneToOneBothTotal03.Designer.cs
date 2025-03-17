@@ -4,6 +4,7 @@ using DemoEFCore2.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DemoEFCore2.Migrations
 {
     [DbContext(typeof(CompanyDbContext))]
-    partial class CompanyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250312222557_OneToOneBothTotal03")]
+    partial class OneToOneBothTotal03
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,23 +24,6 @@ namespace DemoEFCore2.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("DemoEFCore2.Entites.Course", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Courses");
-                });
 
             modelBuilder.Entity("DemoEFCore2.Entites.Department", b =>
                 {
@@ -83,9 +69,6 @@ namespace DemoEFCore2.Migrations
                     b.Property<int?>("Age")
                         .HasColumnType("int");
 
-                    b.Property<int?>("DepartmentId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -102,51 +85,7 @@ namespace DemoEFCore2.Migrations
 
                     b.HasKey("EmpId");
 
-                    b.HasIndex("DepartmentId");
-
                     b.ToTable("Employees", "dbo");
-                });
-
-            modelBuilder.Entity("DemoEFCore2.Entites.Student", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("Age")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Students");
-                });
-
-            modelBuilder.Entity("DemoEFCore2.Entites.StudentCourse", b =>
-                {
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Grade")
-                        .HasColumnType("int");
-
-                    b.HasKey("StudentId", "CourseId");
-
-                    b.HasIndex("CourseId");
-
-                    b.ToTable("StudentCourse");
                 });
 
             modelBuilder.Entity("DemoEFCore2.Entites.Department", b =>
@@ -187,10 +126,6 @@ namespace DemoEFCore2.Migrations
 
             modelBuilder.Entity("DemoEFCore2.Entites.Employee", b =>
                 {
-                    b.HasOne("DemoEFCore2.Entites.Department", "Department")
-                        .WithMany("Employees")
-                        .HasForeignKey("DepartmentId");
-
                     b.OwnsOne("DemoEFCore2.Entites.Address", "Address", b1 =>
                         {
                             b1.Property<int>("EmployeeEmpId")
@@ -215,47 +150,11 @@ namespace DemoEFCore2.Migrations
 
                     b.Navigation("Address")
                         .IsRequired();
-
-                    b.Navigation("Department");
-                });
-
-            modelBuilder.Entity("DemoEFCore2.Entites.StudentCourse", b =>
-                {
-                    b.HasOne("DemoEFCore2.Entites.Course", "Course")
-                        .WithMany("CourseStudents")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DemoEFCore2.Entites.Student", "Student")
-                        .WithMany("StudentCourses")
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Course");
-
-                    b.Navigation("Student");
-                });
-
-            modelBuilder.Entity("DemoEFCore2.Entites.Course", b =>
-                {
-                    b.Navigation("CourseStudents");
-                });
-
-            modelBuilder.Entity("DemoEFCore2.Entites.Department", b =>
-                {
-                    b.Navigation("Employees");
                 });
 
             modelBuilder.Entity("DemoEFCore2.Entites.Employee", b =>
                 {
                     b.Navigation("ManagedDeprtment");
-                });
-
-            modelBuilder.Entity("DemoEFCore2.Entites.Student", b =>
-                {
-                    b.Navigation("StudentCourses");
                 });
 #pragma warning restore 612, 618
         }
