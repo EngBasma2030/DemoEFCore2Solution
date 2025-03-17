@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DemoEFCore2.Migrations
 {
     [DbContext(typeof(CompanyDbContext))]
-    [Migration("20250309003452_changeInEmpEmail")]
+    [Migration("20250310214558_changeInEmpEmail")]
     partial class changeInEmpEmail
     {
         /// <inheritdoc />
@@ -25,31 +25,24 @@ namespace DemoEFCore2.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Common.Department", b =>
+            modelBuilder.Entity("DemoEFCore2.Entites.Department", b =>
                 {
-                    b.Property<int>("DeptId")
+                    b.Property<int>("DepartmentId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DeptId"), 10L, 10);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DepartmentId"));
 
-                    b.Property<DateTime>("DateOfCreation")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GetDate()")
-                        .HasAnnotation("DataType", "DateTime");
+                    b.Property<DateOnly>("CreationDate")
+                        .HasColumnType("date");
 
                     b.Property<string>("Name")
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(20)
-                        .HasColumnType("varchar")
-                        .HasDefaultValue("HR")
-                        .HasColumnName("DepartmentNAme")
-                        .HasAnnotation("MaxLenght", 20);
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("DeptId");
+                    b.HasKey("DepartmentId");
 
-                    b.ToTable("Departments", "Sales");
+                    b.ToTable("Departments");
                 });
 
             modelBuilder.Entity("DemoEFCore2.Entites.Employee", b =>

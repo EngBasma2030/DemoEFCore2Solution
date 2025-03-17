@@ -4,11 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoEFCore2", "DemoEFCore2\DemoEFCore2.csproj", "{5A986A7D-E750-498F-9F9E-6333A9700D7B}"
-	ProjectSection(ProjectDependencies) = postProject
-		{971A76F5-9A48-4865-A87D-3464BDFE2432} = {971A76F5-9A48-4865-A87D-3464BDFE2432}
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{971A76F5-9A48-4865-A87D-3464BDFE2432}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,10 +15,6 @@ Global
 		{5A986A7D-E750-498F-9F9E-6333A9700D7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5A986A7D-E750-498F-9F9E-6333A9700D7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5A986A7D-E750-498F-9F9E-6333A9700D7B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{971A76F5-9A48-4865-A87D-3464BDFE2432}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{971A76F5-9A48-4865-A87D-3464BDFE2432}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{971A76F5-9A48-4865-A87D-3464BDFE2432}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{971A76F5-9A48-4865-A87D-3464BDFE2432}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

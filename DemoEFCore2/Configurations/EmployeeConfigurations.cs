@@ -13,8 +13,10 @@ namespace DemoEFCore2.Configurations
     {
         public void Configure(EntityTypeBuilder<Employee> builder)
         {
-            builder.Property(E => E.Address)
-               .HasDefaultValue("cairo");
+            //builder.Property(E => E.Address)
+            //   .HasDefaultValue("cairo");
+
+            builder.OwnsOne(E => E.Address, Address => Address.WithOwner());
         }
     }
 }
