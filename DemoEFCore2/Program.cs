@@ -104,7 +104,7 @@ namespace DemoEFCore2
 
             #region Session 04
 
-            #region Explicit loading
+            #region 1. Explicit loading
             //var employee = (from E in dbContext.Employees
             //                where E.EmpId == 20
             //                select E).FirstOrDefault();
@@ -129,26 +129,65 @@ namespace DemoEFCore2
             #endregion
 
             #region 2. Eager loadind
-            var employee = (from E in dbContext.Employees.Include(E => E.Department)
-                             .Include(E => E.ManagedDeprtment)
-                            where E.EmpId == 20
-                            select E).FirstOrDefault();
+            //var employee = (from E in dbContext.Employees.Include(E => E.Department)                            
+            //                where E.EmpId == 20
+            //                select E).FirstOrDefault();
 
-           
-            Console.WriteLine($"EmpName : {employee?.Name} , DeptName : {employee?.Department.Name}");
 
-            //var department = (from D in dbContext.Departments
+            //Console.WriteLine($"EmpName : {employee?.Name} , DeptName : {employee?.Department?.Name}");
+
+            //var department = (from D in dbContext.Departments.Include(D => D.Employees)
             //                  where D.DepartmentId == 11
             //                  select D).FirstOrDefault();
 
-            //// Extra Trip
-            //dbContext.Entry(department).Collection(D => D.Employees).Load();
             //Console.WriteLine($"DeptName : {department?.Name}");
 
             //foreach (var emp in department?.Employees)
             //{
             //    Console.WriteLine($"EmpName : {emp.Name}");
             //}
+            #endregion
+
+            #region 3. Lazy loading
+            //var employee = (from E in dbContext.Employees
+            //                where E.EmpId == 20
+            //                select E).FirstOrDefault();
+
+
+            //Console.WriteLine($"EmpName : {employee?.Name} , DeptName : {employee?.Department?.Name}");
+
+            //var department = (from D in dbContext.Departments.Include(D => D.Employees)
+            //                  where D.DepartmentId == 11
+            //                  select D).FirstOrDefault();
+
+            //Console.WriteLine($"DeptName : {department?.Name}");
+
+            //foreach (var emp in department?.Employees)
+            //{
+            //    Console.WriteLine($"EmpName : {emp.Name}");
+            //}
+            #endregion
+
+            #region Tracking
+            //dbContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+            //var employee = (from E in dbContext.Employees
+            //                where E.EmpId == 20
+            //                select E).AsNoTracking().FirstOrDefault();
+            //Console.WriteLine(dbContext.Entry(employee).State); // Unchanged
+
+            //employee.Name = "Noha";
+            //Console.WriteLine(dbContext.Entry(employee).State); // Modified
+
+            //dbContext.SaveChanges();
+            #endregion
+
+            #region Mapping view
+            //var result = dbContext.EmployeeDepartments.FromSqlRaw("select * From EmployeeDepartmentView");
+
+            foreach (var item in dbContext.EmployeeDepartments)
+            {
+                Console.WriteLine($"Employee : {item.EmpName} , Department : {item.DeptName}");
+            }
             #endregion
 
             #endregion

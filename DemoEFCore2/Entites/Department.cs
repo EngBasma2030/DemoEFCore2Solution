@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DemoEFCore2.Entites
 {
-    internal class Department
+    public class Department
     {
         public int DepartmentId { get; set; }
         public string Name { get; set; }
@@ -23,12 +23,12 @@ namespace DemoEFCore2.Entites
         // navigation property [one]
         // EF core : Department must has one employee [manager] => [total Perticaption]
         [InverseProperty("ManagedDeprtment")]
-         public Employee Manager { get; set; }
+         public virtual Employee Manager { get; set; }
 
         public Address Address { get; set; }
         // navigation property [many]
         // [InverseProperty("Department")]
-        public ICollection<Employee> Employees { get; set; } = new HashSet<Employee>();
+        public virtual ICollection<Employee> Employees { get; set; } = new HashSet<Employee>();
 
         //public Department()
         //{

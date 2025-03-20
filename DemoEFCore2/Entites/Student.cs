@@ -16,6 +16,6 @@ namespace DemoEFCore2.Entites
         public string Address { get; set; }
 
         // public ICollection<Course> Courses { get; set; }
-        public ICollection<StudentCourse> StudentCourses { get; set; }
+        public virtual ICollection<StudentCourse> StudentCourses { get; set; }
     }
 }

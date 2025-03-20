@@ -32,7 +32,7 @@ namespace DemoEFCore2.Entites
     #endregion
 
     [Table("Employees",Schema ="dbo")]
-    internal class Employee
+    public class Employee
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)] // (1,1) 
@@ -67,12 +67,12 @@ namespace DemoEFCore2.Entites
         // navigation property [one]
         // EF core : Employee may manage department or not [partial participation]
         [InverseProperty("Manager")]
-        public Department? ManagedDeprtment { get; set; }
+        public virtual Department? ManagedDeprtment { get; set; }
 
         public int? DepartmentId { get; set; }
         // navigation property [one]
         [InverseProperty("Employees")]
         //[ForeignKey("Hamadaaa")]
-        public Department Department { get; set; }
+        public virtual Department Department { get; set; }
     }
 }

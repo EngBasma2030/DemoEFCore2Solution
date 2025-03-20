@@ -19,7 +19,7 @@ namespace DemoEFCore2.Contexts
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server = DESKTOP-RKP4IOQ ; Database = Company ; Trusted_Connection = True ; Encrypt = False");
+            optionsBuilder.UseLazyLoadingProxies().UseSqlServer("Server = DESKTOP-RKP4IOQ ; Database = Company ; Trusted_Connection = True ; Encrypt = False");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -76,6 +76,8 @@ namespace DemoEFCore2.Contexts
             modelBuilder.Entity<StudentCourse>()
                 .HasKey(sc => new { sc.StudentId, sc.CourseId });
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<EmployeeDepartment>().ToView("EmployeeDepartmentView");
         }
         public DbSet<Employee> Employees { get; set; }
 
@@ -84,6 +86,7 @@ namespace DemoEFCore2.Contexts
         public DbSet<Address> Address { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<Course> Courses { get; set; }
+        public DbSet<EmployeeDepartment> EmployeeDepartments { get; set; }
 
     }
 }

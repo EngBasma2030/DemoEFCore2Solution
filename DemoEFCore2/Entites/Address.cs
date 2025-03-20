@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace DemoEFCore2.Entites
 {
     [Owned]
-    internal class Address
+    public class Address
     {
        // public int Id { get; set; }
         public string? City { get; set; }
