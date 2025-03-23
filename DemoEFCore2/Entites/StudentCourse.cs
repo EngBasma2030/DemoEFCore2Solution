@@ -9,7 +9,7 @@ namespace DemoEFCore2.Entites
 {
     [PrimaryKey(nameof(StudentId) , nameof(CourseId))]
 
-    internal class StudentCourse
+    public class StudentCourse
     {
         public int StudentId { get; set; }
         public int CourseId { get; set; }
