@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DemoEFCore2.Entites
 {
-    internal class Student
+    public class Student
     {
         public int Id { get; set; }
         public string Name { get; set; }

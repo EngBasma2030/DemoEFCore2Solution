@@ -2,6 +2,7 @@
 using DemoEFCore2.Entites;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design.Internal;
+using Microsoft.EntityFrameworkCore.Internal;
 using System.ComponentModel.DataAnnotations;
 
 namespace DemoEFCore2
@@ -184,12 +185,180 @@ namespace DemoEFCore2
             #region Mapping view
             //var result = dbContext.EmployeeDepartments.FromSqlRaw("select * From EmployeeDepartmentView");
 
-            foreach (var item in dbContext.EmployeeDepartments)
-            {
-                Console.WriteLine($"Employee : {item.EmpName} , Department : {item.DeptName}");
-            }
+            //foreach (var item in dbContext.EmployeeDepartments)
+            //{
+            //    Console.WriteLine($"Employee : {item.EmpName} , Department : {item.DeptName}");
+            //}
             #endregion
 
+            #endregion
+
+            #region Session 05
+
+            #region Join [Inner Join]
+            // 1. Query Syntax
+            //var result = from E in dbContext.Employees
+            //             join D in dbContext.Departments
+            //             on E.DepartmentId equals D.DepartmentId
+            //             where E.Salary >= 5000
+            //             select new
+            //             {
+            //                 Employee = E.Name,
+            //                 DeptName = D.Name
+            //             };
+
+            // 2. fluent syntax
+            //var result = dbContext.Employees.Join(dbContext.Departments, E => E.DepartmentId, D => D.DepartmentId,
+            //                                     (E, D) => new
+            //                                     {
+            //                                         EmpName = E.Name,
+            //                                         DeptName = D.Name,
+            //                                         Salary = E.Salary,
+            //                                     }).Where(A => A.Salary >= 5000);
+            //foreach (var item in result)
+            //{
+            //    Console.WriteLine(item);
+            //}
+            #endregion
+
+            #region Group Join [Left Outer Join]
+
+            #region example 01
+            //var result = dbContext.Departments.GroupJoin(dbContext.Employees, D => D.DepartmentId, E => E.DepartmentId, (D, E) => new
+            //{
+            //    Department = D,
+            //    Employee = E
+            //});
+
+            //var result = from D in dbContext.Departments
+            //             join E in dbContext.Employees
+            //             on D.DepartmentId equals E.DepartmentId into Groups
+            //             select new
+            //             {
+            //                 Department = D,
+            //                 Employee = Groups
+            //             };
+
+            //foreach (var item in result)
+            //{
+            //    Console.WriteLine($"Department = {item.Department.Name}");
+            //    Console.WriteLine("******************************");
+            //    foreach (var item1 in item.Employee)
+            //    {
+            //        Console.WriteLine(item1.Name);
+            //    }
+            //}
+            #endregion
+
+            #region example 02
+            //var result = dbContext.Departments.GroupJoin(dbContext.Employees, D => D.DepartmentId, E => E.DepartmentId,
+            //    (Department, Employee) => new
+            //    {
+            //        Department = Department,
+            //        Employees = Employee
+            //    }).Where(A => A.Employees.Count() > 1);
+
+            //var result = from D in dbContext.Departments
+            //             join E in dbContext.Employees
+            //             on D.DepartmentId equals E.DepartmentId into Groups
+            //             select new
+            //             {
+            //                 Department = D,
+            //                 Employees = Groups
+            //             } into Groups
+            //             where Groups.Employees.Count() > 1
+            //             select Groups;
+
+
+            //foreach (var Item in result)
+            //{
+            //    Console.WriteLine(Item.Department.Name);
+            //    Console.WriteLine("##########################");
+            //    foreach (var EmpItem in Item.Employees)
+            //    {
+            //        Console.WriteLine(EmpItem.Name);
+            //    }
+            //}
+            #endregion
+
+            #region Left Join Not Working 
+            //var result = dbContext.Departments.LeftJoin(dbContext.Employees, D => D.DepartmentId, E => E.DepartmentId,
+            //    (D, E) => new
+            //    {
+            //        Department = D,
+            //        Emp = E
+            //    });
+
+            //foreach (var item in result)
+            //{
+            //    Console.WriteLine(item);
+            //}
+            #endregion
+
+            #region Group Join [Right outer join ]
+            //var result = dbContext.Employees.GroupJoin(dbContext.Departments, E => E.DepartmentId, D => D.DepartmentId,
+            //    (E, D) => new
+            //    {
+            //        Employee = E,
+            //        Department = D
+
+            //    });
+
+            //foreach (var item in result)
+            //{
+            //    Console.WriteLine(item.Employee.Name);
+            //    foreach (var item1 in item.Department)
+            //    {
+            //        Console.WriteLine(item1.Name);
+            //    }
+            //}
+            #endregion
+
+
+            #endregion
+
+            #region Creoss Join
+            //var result = from E in dbContext.Employees
+            //             from D in dbContext.Departments
+            //             select new
+            //             {
+            //                 E.Name,
+            //                 DeptName = D.Name
+            //             };
+
+            //var result = dbContext.Employees.SelectMany(E => dbContext.Departments.Select(D => new
+            //{
+            //    E.Name,
+            //    DeptName = D.Name
+            //}));
+
+            //foreach (var item in result)
+            //{
+            //    Console.WriteLine(item);
+            //}
+            #endregion
+
+
+
+            var emp01 = dbContext.Employees.FirstOrDefault();
+            if(emp01 != null)
+            {
+                // Console.WriteLine(emp01.Age); // 22
+                emp01.Age = null;
+            }
+
+            //var result = dbContext.Employees.Local.Any(E => E.Age == null);
+            //Console.WriteLine($"result local => {result}");
+
+            //result = dbContext.Employees.Any(E => E.Age == null);
+            //Console.WriteLine($"result Remote => {result}");
+
+            var result = dbContext.Employees.Find(1);
+            result = dbContext.Find<Employee>(1);
+
+            dbContext.Employees.Load();
+
+            Console.WriteLine(result.Name);
             #endregion
         }
     }
